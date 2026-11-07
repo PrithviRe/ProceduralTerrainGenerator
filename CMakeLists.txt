@@ -1,0 +1,48 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(ProceduralTerrainGenerator LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+find_package(OpenGL REQUIRED)
+find_package(glfw3 3.3 REQUIRED)
+find_package(glm REQUIRED)
+
+add_library(glad STATIC
+    third_party/glad/src/glad.c
+)
+
+target_include_directories(glad PUBLIC
+    third_party/glad/include
+)
+
+add_executable(ProceduralTerrainGenerator
+    src/main.cpp
+)
+
+target_include_directories(ProceduralTerrainGenerator PRIVATE
+    src
+)
+
+target_link_libraries(ProceduralTerrainGenerator PRIVATE
+    glad
+    glfw
+    glm::glm
+    OpenGL::GL
+)
+
+target_compile_definitions(ProceduralTerrainGenerator PRIVATE
+    SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/shaders"
+)
+
+target_compile_options(ProceduralTerrainGenerator PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic
+    -O3
+)
+
